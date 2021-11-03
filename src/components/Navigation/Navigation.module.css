@@ -1,0 +1,23 @@
+.navigation {
+    grid-area: navigation;
+    border: 2px solid black;
+    width: 180px;
+    background-color: aquamarine;
+    padding-left: 25px;
+    padding-top: 20px;
+}
+
+.item a{
+    color: white;
+    font-size: 25px;
+    text-decoration: none;
+
+}
+.item:last-child{
+   padding-top: 25px;
+}
+
+.item a.active{
+    color: gainsboro;
+    font-size: 35px;
+}

@@ -1,0 +1,21 @@
+.about{
+    display: flex;
+}
+
+.about img {
+    width: 250px;
+    margin-right: 35px;
+
+}
+
+.description{
+    font-size: 20px;
+
+}
+.name{
+    font-size: 25px;
+    font-family: "Georgia";
+    font-weight: bold;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
