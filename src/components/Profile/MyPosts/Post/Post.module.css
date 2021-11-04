@@ -1,6 +1,7 @@
 .item {
     color : green;
     font-size: 30px;
+    padding: 10px;
 }
 .circle{
     width: 50px;
