@@ -9,12 +9,17 @@ import {BrowserRouter, Route} from "react-router-dom";
 import Music from './components/Music/Music';
 import News from "./components/News/News";
 import Settings from "./components/Settings/Settings";
+import {updatePostChange} from "./redux/state";
 type AppPropsType = {
-    state : {profilePage: {posts: Object[]},
+    state : {profilePage: {posts: Object[],newPostText: string},
+
         dialogsPage: {
             dialogs: Object[],
             messages: Object[]
-        }}
+        }},
+    addPost: (postMessage: string) => void,
+    updatePostChange: (newText: string) => void
+
 }
 
 
@@ -26,7 +31,10 @@ function App(props:AppPropsType) {
                <Header/>
                <Navigation/>
                <div className={'app-wrapper-content'}>
-                  <Route path='/profile' render ={() => <Profile posts={props.state.profilePage.posts} />}/>
+                  <Route path='/profile' render ={() => <Profile posts={props.state.profilePage.posts}
+                                                                 addPost ={props.addPost}
+                                                                 newPostText ={props.state.profilePage.newPostText}
+                                                                 updatePostChange={props.updatePostChange}/>}/>
                   <Route path='/dialogs' render ={() => <Dialogs
                       dialogs = {props.state.dialogsPage.dialogs}
                       messages={props.state.dialogsPage.messages}/>} />
