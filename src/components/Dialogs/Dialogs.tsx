@@ -5,7 +5,9 @@ import Message from "./Message/Message";
 
 type DialogsPropsType = {
     dialogs: Object[],
-    messages : Object[]
+    messages : Object[],
+    newMessageBody: string,
+    dispatch: (type: Object) => void,
 }
 
 
@@ -18,15 +20,29 @@ function Dialogs(props: DialogsPropsType){
     let messagesElements = props.messages.map((el: any) => (
         <Message message={el.message}/>
     ))
+    let newMessageBody = props.newMessageBody
 
+    let onSendMessageClick = () => {
 
+        props.dispatch({type: 'SEND-MESSAGE'})
+    }
+
+    let onNewMessageChange = (e: any) => {  // спросить тип event
+        let body = e.target.value
+         props.dispatch({type: 'UPDATE-NEW-MESSAGE-BODY', body: body})
+    }
     return(
     <div className={style.dialogs}>
         <div className={style.dialogsItems}>
             {dialogElements}
         </div>
         <div className={style.messages}>
-            {messagesElements}
+           <div>{messagesElements}</div>
+            <div>
+                <div><textarea value = {newMessageBody}
+                               onChange={onNewMessageChange}>Enter your message</textarea></div>
+                <div><button onClick={onSendMessageClick}>Send</button></div>
+            </div>
         </div>
     </div>
     );

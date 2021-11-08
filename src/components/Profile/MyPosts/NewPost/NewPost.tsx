@@ -2,9 +2,9 @@ import React, {useRef} from "react";
 import style from './../NewPost/NewPost.module.css'
 
 type addPostPropsType = {
-    addPost: (postMessage: string) => void,
+    dispatch: (type: Object) => void,
     newPostText: string,
-    updatePostChange: (newText: string) => void
+
 }
 
 
@@ -15,8 +15,7 @@ function NewPost(props: addPostPropsType) {
     let addPost = () => {
         if (newPosts.current) {                /*условие if обязательно для typescript при работе DOM */
             let text = newPosts.current.value
-            props.addPost(text)
-          //  props.updatePostChange('')
+            props.dispatch({type: 'ADD-POST', text: text})
         }
 
     }
@@ -24,7 +23,7 @@ function NewPost(props: addPostPropsType) {
     let onPostChange = () => {               /*функция круговорота каждой  буквы введенной в  texearea через state  */
         if (newPosts.current) {
             let text = newPosts.current.value
-            props.updatePostChange(text)
+            props.dispatch({type: 'UPDATE-POST-CHANGE', newText: text})
         }
     }
 
