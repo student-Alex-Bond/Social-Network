@@ -1,10 +1,12 @@
 import React, {useRef} from "react";
 import style from './../NewPost/NewPost.module.css'
+import {addPostActionCreator, updateNewPostActionCreator} from "../../../../redux/profile-reducer";
+
+
 
 type addPostPropsType = {
-    dispatch: (type: Object) => void,
+    dispatch: (action: any) => void,
     newPostText: string,
-
 }
 
 
@@ -14,16 +16,14 @@ function NewPost(props: addPostPropsType) {
 
     let addPost = () => {
         if (newPosts.current) {                /*условие if обязательно для typescript при работе DOM */
-            let text = newPosts.current.value
-            props.dispatch({type: 'ADD-POST', text: text})
+            props.dispatch(addPostActionCreator())
         }
-
     }
 
     let onPostChange = () => {               /*функция круговорота каждой  буквы введенной в  texearea через state  */
         if (newPosts.current) {
-            let text = newPosts.current.value
-            props.dispatch({type: 'UPDATE-POST-CHANGE', newText: text})
+            let text: string = newPosts.current.value
+            props.dispatch(updateNewPostActionCreator(text))
         }
     }
 

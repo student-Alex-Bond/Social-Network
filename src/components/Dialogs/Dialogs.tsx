@@ -1,35 +1,36 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import style from './../Dialogs/Dialogs.module.css';
 import DialogItem from "./Dialog/DialogItem";
 import Message from "./Message/Message";
-
-type DialogsPropsType = {
-    dialogs: Object[],
-    messages : Object[],
-    newMessageBody: string,
-    dispatch: (type: Object) => void,
+import {messageType, dialogType} from "../../redux/store";
+import { updateNewMessageActionCreator, sendMessageCreator} from '../../redux/dialogs-reducer'
+type dialogsPropsType = {
+    dialogs: Array<dialogType>
+    messages: Array<messageType>
+    newMessageBody: string
+    dispatch: (action: any) => void,
 }
 
 
-function Dialogs(props: DialogsPropsType){
 
-    let dialogElements = props.dialogs.map((el:any) => (
+function Dialogs(props: dialogsPropsType){
+
+    let dialogElements = props.dialogs.map((el) => (
         <DialogItem name = {el.name} id={el.id}/>
     ))
 
-    let messagesElements = props.messages.map((el: any) => (
+    let messagesElements = props.messages.map((el) => (
         <Message message={el.message}/>
     ))
     let newMessageBody = props.newMessageBody
 
     let onSendMessageClick = () => {
-
-        props.dispatch({type: 'SEND-MESSAGE'})
+        props.dispatch(sendMessageCreator())
     }
 
-    let onNewMessageChange = (e: any) => {  // спросить тип event
-        let body = e.target.value
-         props.dispatch({type: 'UPDATE-NEW-MESSAGE-BODY', body: body})
+   let onNewMessageChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+        let body = e.currentTarget.value
+         props.dispatch(updateNewMessageActionCreator(body))
     }
     return(
     <div className={style.dialogs}>
