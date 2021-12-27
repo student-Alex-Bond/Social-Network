@@ -83,8 +83,8 @@ let store: AppStoreType = {
     },
 
     dispatch(action: any) {
-        this._state.profilePage = profileReducer( this._state.profilePage, action)
-        this._state.dialogsPage = dialogsReducer(this._state.dialogsPage, action)
+        this._state.profilePage = profileReducer( this._state.profilePage, action) // this._state.profilePage => это часть store необходимая для выполнения функции
+        this._state.dialogsPage = dialogsReducer(this._state.dialogsPage, action) // тоже самое  смотри на строчку выше
         this._callSubscriber(this._state);
     }
 }

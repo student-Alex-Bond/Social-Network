@@ -32,7 +32,7 @@ export const  updateNewMessageActionCreator = (body: string) => {
 }
 
 
-const dialogsReducer = (state: dialogsPageType = initialState, action: actionType) => {
+const dialogsReducer = (state: dialogsPageType = initialState , action: actionType) => {
     switch(action.type){
         case UPDATE_NEW_MESSAGE_BODY:
             state.newMessageBody = action.body

@@ -20,7 +20,7 @@ function NewPost(props: addPostPropsType) {
         }
     }
 
-    let onPostChange = () => {               /*функция круговорота каждой  буквы введенной в  texearea через state  */
+    let onPostChange = () => {               /*функция круговорота каждой  буквы введенной в  textarea через state  */
         if (newPosts.current) {
             let text: string = newPosts.current.value
             props.dispatch(updateNewPostActionCreator(text))
