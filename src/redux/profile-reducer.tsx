@@ -1,21 +1,22 @@
-import  {actionType, profilePageType} from "./store";
+import  { profilePageType} from "./store";
 
-const ADD_POST: string = 'ADD-POST'
-const UPDATE_POST_CHANGE: string = 'UPDATE-POST-CHANGE'
+export type addPostAC = ReturnType<typeof addPostActionCreator>
+export type updateNewPostAC = ReturnType<typeof updateNewPostActionCreator>
+
 export const addPostActionCreator = () => {
     return {
-        type: ADD_POST
-    }
+        type: 'ADD-POST'
+    } as const
 }
 
 export const updateNewPostActionCreator = (text: string) => {
     return {
-        type: UPDATE_POST_CHANGE,
+        type: 'UPDATE-POST-CHANGE',
         newText: text
-    }
+    } as const
 }
 
-let initialState = {
+let initialState = { // обьект для инициализации чтобы в функции combineReducer не было undefined
     posts: [
         {id: 1, message: 'Hi, how are you', likesCount: 15},
         {id: 2, message: 'I\'m fine', likesCount: 5}],
@@ -23,9 +24,9 @@ let initialState = {
 }
 
 
-const profileReducer = (state: profilePageType = initialState, action: actionType) => {
+const profileReducer = (state: profilePageType = initialState, action: updateNewPostAC | addPostAC) => {
         switch (action.type) {
-            case ADD_POST:
+            case 'ADD-POST':
                 let newPost = {
                     id: 3,
                     message: state.newPostText,
@@ -34,8 +35,8 @@ const profileReducer = (state: profilePageType = initialState, action: actionTyp
                 state.posts.push(newPost);
                 state.newPostText = ''
                 return state;
-            case  UPDATE_POST_CHANGE:
-                state.newPostText = action.newText;
+            case  "UPDATE-POST-CHANGE":
+                state.newPostText = action.newText ;
                 return state
             default:
                 return state

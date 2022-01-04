@@ -38,7 +38,7 @@ export type AppStoreType = {
     dispatch: (action: any) => void
 }
 
-export interface actionType {
+export interface ActionType {
     type: string,
     newText: string
     body: string
@@ -83,7 +83,7 @@ let store: AppStoreType = {
     },
 
     dispatch(action: any) {
-        this._state.profilePage = profileReducer( this._state.profilePage, action) // this._state.profilePage => это часть store необходимая для выполнения функции
+        this._state.profilePage = profileReducer( this._state.profilePage, action ) // this._state.profilePage => это часть store необходимая для выполнения функции
         this._state.dialogsPage = dialogsReducer(this._state.dialogsPage, action) // тоже самое  смотри на строчку выше
         this._callSubscriber(this._state);
     }

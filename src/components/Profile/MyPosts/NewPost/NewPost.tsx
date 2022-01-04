@@ -1,29 +1,28 @@
-import React, {useRef} from "react";
+import React, {RefObject, useRef} from "react";
 import style from './../NewPost/NewPost.module.css'
-import {addPostActionCreator, updateNewPostActionCreator} from "../../../../redux/profile-reducer";
-
 
 
 type addPostPropsType = {
-    dispatch: (action: any) => void,
-    newPostText: string,
+    onAddPost: () => void
+    newPostText: string
+    updateNewPost: (text: string) => void
 }
 
 
 function NewPost(props: addPostPropsType) {
-    let newPosts = useRef<any>();
+    let newPosts = useRef() as RefObject<HTMLTextAreaElement>;// useRef нежелательно использовать, но если надо то только так типизировать можно его
 
 
-    let addPost = () => {
-        if (newPosts.current) {                /*условие if обязательно для typescript при работе DOM */
-            props.dispatch(addPostActionCreator())
+    let onAddPost = () => {
+        if (newPosts) {                /*условие if обязательно для typescript при работе DOM */
+            props.onAddPost()
         }
     }
 
     let onPostChange = () => {               /*функция круговорота каждой  буквы введенной в  textarea через state  */
         if (newPosts.current) {
             let text: string = newPosts.current.value
-            props.dispatch(updateNewPostActionCreator(text))
+            props.updateNewPost(text)
         }
     }
 
@@ -32,9 +31,11 @@ function NewPost(props: addPostPropsType) {
             <textarea ref={newPosts} onChange={onPostChange}
                       value={props.newPostText}>You new post</textarea> {/*поле у textarea всегда должно быть заполнено
                                                        всегда должно быть поле value and обработчик событий onChange*/}
-            <button onClick={addPost}>Send</button>
+            <button onClick={onAddPost}>Send</button>
         </div>
     );
 }
 
 export default NewPost;
+
+
