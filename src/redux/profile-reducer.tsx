@@ -1,5 +1,15 @@
-import  { profilePageType} from "./store";
 
+
+export type profilePageType = {
+    posts: Array<postType>
+    newPostText: string
+}
+
+export type postType = {
+    id: number
+    message: string
+    likesCount: number
+}
 export type addPostAC = ReturnType<typeof addPostActionCreator>
 export type updateNewPostAC = ReturnType<typeof updateNewPostActionCreator>
 
@@ -19,12 +29,12 @@ export const updateNewPostActionCreator = (text: string) => {
 let initialState = { // обьект для инициализации чтобы в функции combineReducer не было undefined
     posts: [
         {id: 1, message: 'Hi, how are you', likesCount: 15},
-        {id: 2, message: 'I\'m fine', likesCount: 5}],
+        {id: 2, message: 'I\'m fine', likesCount: 5}] as Array<postType>,
     newPostText: '',
 }
+export type initialProfileStateType = typeof initialState
 
-
-const profileReducer = (state: profilePageType = initialState, action: updateNewPostAC | addPostAC) => {
+const profileReducer = (state: initialProfileStateType = initialState, action: updateNewPostAC | addPostAC): profilePageType => {
         switch (action.type) {
             case 'ADD-POST':
                 let newPost = {

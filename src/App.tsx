@@ -29,10 +29,11 @@ function App(props:AppPropsType) {
                                                                  newPostText ={props.state.profilePage.newPostText}
                                                                  />}/>
                   <Route path='/dialogs' render ={() => <DialogsContainer
-                      dialogs = {props.state.dialogsPage.dialogs}
-                      messages={props.state.dialogsPage.messages}
-                     dispatch={props.dispatch}
-                      newMessageBody={props.state.dialogsPage.newMessageBody}/>} />
+                     //  dialogs = {props.state.dialogsPage.dialogs}
+                     //  messages={props.state.dialogsPage.messages}
+                     // dispatch={props.dispatch}
+                     //  newMessageBody={props.state.dialogsPage.newMessageBody}
+                          />} />
                    <Route path='/music' component ={Music}/>
                   <Route path='/news' component ={News}/>
                   <Route path='/settings' component ={Settings}/>

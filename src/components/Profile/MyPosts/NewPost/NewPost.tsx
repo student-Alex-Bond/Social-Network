@@ -1,15 +1,16 @@
 import React, {RefObject, useRef} from "react";
 import style from './../NewPost/NewPost.module.css'
+import {NewPostsProps} from "./NewPostContainer";
 
 
-type addPostPropsType = {
-    onAddPost: () => void
-    newPostText: string
-    updateNewPost: (text: string) => void
-}
+// type addPostPropsType = {
+//     onAddPost: () => void
+//     newPostText: string
+//     updateNewPost: (text: string) => void
+// }
 
 
-function NewPost(props: addPostPropsType) {
+function NewPost(props: NewPostsProps) {
     let newPosts = useRef() as RefObject<HTMLTextAreaElement>;// useRef нежелательно использовать, но если надо то только так типизировать можно его
 
 
@@ -35,6 +36,8 @@ function NewPost(props: addPostPropsType) {
         </div>
     );
 }
+
+
 
 export default NewPost;
 

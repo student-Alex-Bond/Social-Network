@@ -1,7 +1,7 @@
 import profileReducer from "./profile-reducer";
 import dialogsReducer from "./dialogs-reducer";
 
-export type messageType = {
+ type messageType = {
     id: number
     message: string
 }
@@ -10,16 +10,16 @@ export type postType = {
     message: string
     likesCount: number
 }
-export type dialogType = {
+ type dialogType = {
     id: number
     name: string
 }
 
-export type profilePageType = {
+ type profilePageType = {
     posts: Array<postType>
     newPostText: string
 }
-export type dialogsPageType = {
+ type dialogsPageType = {
     dialogs: Array<dialogType>
     messages: Array<messageType>
     newMessageBody: string
@@ -30,7 +30,7 @@ export type dialogsPageType = {
     dialogsPage: dialogsPageType
 }
 
-export type AppStoreType = {
+ export type AppStoreType = {
     _state: stateType
     getState: () => stateType
     _callSubscriber: (_state: stateType) => void
@@ -38,7 +38,7 @@ export type AppStoreType = {
     dispatch: (action: any) => void
 }
 
-export interface ActionType {
+ export interface ActionType {
     type: string,
     newText: string
     body: string
