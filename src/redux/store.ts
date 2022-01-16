@@ -45,7 +45,7 @@ export type postType = {
     text: string
 }
 
-let store: AppStoreType = {
+let oldStore: AppStoreType = {
     _state: {
         profilePage: {
             posts: [
@@ -89,4 +89,4 @@ let store: AppStoreType = {
     }
 }
 
-export default store;
+export default oldStore;

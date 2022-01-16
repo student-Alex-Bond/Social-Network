@@ -26,7 +26,7 @@ export const sendMessageCreator = ()=> {
 }
 
 export const  updateNewMessageActionCreator = (body: string) => {
-    return {type: 'UPDATE-NEW-MESSAGE-BODY', body: body} as const
+    return {type: 'UPDATE-NEW-MESSAGE-BODY', body: body} as const// важно не забывать типизировать как ''''as const'''''
 }
 
 let initialState = { // обьект для инициализации, чтобы в функции combineReducer не было undefined
@@ -48,16 +48,24 @@ let initialState = { // обьект для инициализации, чтоб
 }
 
 const dialogsReducer = (state: InitialDialogsStateType = initialState , action: sendMessageAC | updateNewMessageAC): dialogsPageType => {
-    debugger
+
     switch(action.type){
         case 'UPDATE-NEW-MESSAGE-BODY':
-            state.newMessageBody = action.body
-            return state
+            //state.newMessageBody = action.body
+            return {
+                ...state,
+                newMessageBody: state.newMessageBody = action.body
+
+            }
         case 'SEND-MESSAGE':
-            let body = state.newMessageBody;
-            state.messages.push({id: 6, message: body})
-            state.newMessageBody = '';
-            return state
+            let newMessage = {id: 6, message: state.newMessageBody}
+            //state.messages.push({id: 6, message: body})
+           // state.newMessageBody = '';
+            return {
+                ...state,
+                newMessageBody: '',
+                messages: state.messages.concat(newMessage)// функция concat возвращает новый массив, состоящий из массива, на котором он был вызван, соединённого с другими массивами и/или значениями, переданными в качестве аргументов.
+            }
         default:
             return state
     }

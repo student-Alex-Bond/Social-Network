@@ -8,13 +8,13 @@ import {DialogsType} from "./DialogsContainer";
 
 
 function Dialogs(props: DialogsType){
-debugger
+
     let dialogElements = props.dialogsPage.dialogs.map((el) => (
-        <DialogItem name = {el.name} id={el.id}/>
+        <DialogItem name = {el.name} id={el.id} key={ el.id}/>
     ))
 
     let messagesElements = props.dialogsPage.messages.map((el) => (
-        <Message message={el.message}/>
+        <Message message={el.message} key={el.id}/>
     ))
 
     let onNewMessageChange = (event: ChangeEvent<HTMLTextAreaElement>) => {

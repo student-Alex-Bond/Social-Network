@@ -1,5 +1,3 @@
-
-
 export type profilePageType = {
     posts: Array<postType>
     newPostText: string
@@ -35,22 +33,35 @@ let initialState = { // обьект для инициализации чтоб�
 export type initialProfileStateType = typeof initialState
 
 const profileReducer = (state: initialProfileStateType = initialState, action: updateNewPostAC | addPostAC): profilePageType => {
-        switch (action.type) {
-            case 'ADD-POST':
-                let newPost = {
-                    id: 3,
-                    message: state.newPostText,
-                    likesCount: 0,
-                }
-                state.posts.push(newPost);
-                state.newPostText = ''
-                return state;
-            case  "UPDATE-POST-CHANGE":
-                state.newPostText = action.newText ;
-                return state
-            default:
-                return state
+//debugger
+    switch (action.type) {
+        case 'ADD-POST':
+            // let stateCopy = {...state}
+            // stateCopy.posts = [...state.posts]
+            let newPost = {
+                id: 3,
+                message: state.newPostText,
+                likesCount: 0,
+            }
+            // stateCopy.posts.push(newPost);
+            // state.newPostText = ''
+            // return stateCopy;
+            return {
+                ...state,
+                newPostText: '',
+                posts: state.posts.concat(newPost)
+            }
+        case  'UPDATE-POST-CHANGE': {
+            // stateCopy.newPostText = action.newText ;
+
+            return {
+                ...state,
+                newPostText: action.newText
+            }
         }
+        default:
+            return state
+    }
 }
 
 export default profileReducer;
