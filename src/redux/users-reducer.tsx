@@ -1,21 +1,23 @@
-
-
 const FOLLOW = 'FOLLOW'
 const UNFOLLOW = 'UNFOLLOW'
 const SET_USERS = 'SET_USERS'
+const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE'
+const SET_TOTAL_USERS_COUNT = 'SET_TOTAL_COUNT'
 
-export type UsersPageType = {
-    users: Array<usersType>
-
-}
 
 export type usersType = {
     id: number
-    photo: string
+    photos: PhotoType
     followed: boolean
-    fullName: string
+    name: string
     status: string
-    location: locationType
+    location?: locationType
+}
+
+
+type PhotoType = {
+    large: string
+    small: string
 }
 
 type locationType = {
@@ -25,6 +27,8 @@ type locationType = {
 export type addPostAC = ReturnType<typeof followAC>
 export type updateNewPostAC = ReturnType<typeof unfollowAC>
 export type setUsersAC = ReturnType<typeof setUsersAC>
+export type setCurrentPageAC = ReturnType<typeof setCurrentPageAC>
+export type setTotalUsersCountAC = ReturnType<typeof setTotalUsersCountAC>
 
 export const followAC = (userID: number) => {
     return {
@@ -40,54 +44,41 @@ export const unfollowAC = (userID: number) => {
     } as const
 }
 
-export const setUsersAC = (users: Array<usersType> ) => {
+export const setUsersAC = (users: Array<usersType>) => {
     return {
         type: SET_USERS,
         users
     } as const
 }
 
-let initialState = { // обьект для инициализации чтобы в функции combineReducer не было undefined
-    users: [
-    //     {
-    //         id: 1,
-    //         photo: ava_user,
-    //         followed: true,
-    //         fullName: 'Dmitry',
-    //         status: 'I am a Boss',
-    //         location: {country: 'Belarus', city: 'Minsk'}
-    //     },
-    //     {
-    //         id: 2,
-    //         photo: ava_user,
-    //         followed: false,
-    //         fullName: 'Svetlana',
-    //         status: 'I am a Boss too',
-    //         location: {country: 'Belarus', city: 'Minsk'}
-    //     },
-    //     {
-    //         id: 3,
-    //         photo: ava_user,
-    //         followed: true,
-    //         fullName: 'Evgeniy',
-    //         status: 'I am a Boss too',
-    //         location: {country: 'Moscow', city: 'Russia'}
-    //     },
-    //     {
-    //         id: 4,
-    //         photo: ava_user,
-    //         followed: true,
-    //         fullName: 'Andrew',
-    //         status: 'I am a Boss too',
-    //         location: {country: 'Kiev', city: 'Ukraine'}
-    //     },
-    ] as Array<usersType>,
-
+export const setCurrentPageAC = (currentPage: number) => {
+    return {
+        type: SET_CURRENT_PAGE,
+        currentPage
+    } as const
 }
+
+export const setTotalUsersCountAC = (totalUsersCount: number) => {
+    return {
+        type: SET_TOTAL_USERS_COUNT,
+        totalUsersCount
+    } as const
+}
+
+let initialState = { // обьект для инициализации чтобы в функции combineReducer не было undefined
+    users: [] as Array<usersType>,
+    pageSize: 5,
+    totalUsersCount: 0,
+    currentPage: 1
+}
+
 export type initialProfileStateType = typeof initialState
 
-const usersReducer = (state: initialProfileStateType = initialState, action: updateNewPostAC | addPostAC | setUsersAC): UsersPageType => {
+export type commonActionType = updateNewPostAC | addPostAC | setUsersAC | setCurrentPageAC | setTotalUsersCountAC
+
+const usersReducer = (state: initialProfileStateType = initialState, action: commonActionType): initialProfileStateType => {
 //debugger
+    console.log(state)
     switch (action.type) {
         case FOLLOW:
             return {
@@ -112,9 +103,20 @@ const usersReducer = (state: initialProfileStateType = initialState, action: upd
         case SET_USERS:
             return {
                 ...state,
-                users: [...state.users, ...action.users]
-            } as UsersPageType
+                users: action.users
+            }
+        case SET_CURRENT_PAGE:
+            return {
+                ...state,
+                currentPage: action.currentPage
+            }
+        case SET_TOTAL_USERS_COUNT:
+            return {
+                ...state,
+                totalUsersCount: action.totalUsersCount
+            }
         default:
+
             return state
     }
 }
