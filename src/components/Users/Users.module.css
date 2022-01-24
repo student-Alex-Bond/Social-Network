@@ -5,4 +5,5 @@
 }
 .selectedPage{
     font-weight: bold;
+    border: 1px solid;
 }
