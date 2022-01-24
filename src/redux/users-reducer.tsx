@@ -69,7 +69,8 @@ let initialState = { // обьект для инициализации чтоб�
     users: [] as Array<usersType>,
     pageSize: 5,
     totalUsersCount: 0,
-    currentPage: 1
+    currentPage: 1,
+    isFetching: false
 }
 
 export type initialProfileStateType = typeof initialState
