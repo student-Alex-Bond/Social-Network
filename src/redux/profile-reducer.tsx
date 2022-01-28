@@ -10,6 +10,7 @@ export type postType = {
 }
 export type addPostAC = ReturnType<typeof addPostActionCreator>
 export type updateNewPostAC = ReturnType<typeof updateNewPostActionCreator>
+export  type setUserProfile = ReturnType<typeof setUserProfile>
 
 export const addPostActionCreator = () => {
     return {
@@ -24,15 +25,23 @@ export const updateNewPostActionCreator = (text: string) => {
     } as const
 }
 
+export const setUserProfile = (profile: any) => {
+    return{
+        type: 'SET_USER_PROFILE',
+        profile
+    } as const
+}
+
 let initialState = { // обьект для инициализации чтобы в функции combineReducer не было undefined
     posts: [
         {id: 1, message: 'Hi, how are you', likesCount: 15},
         {id: 2, message: 'I\'m fine', likesCount: 5}] as Array<postType>,
     newPostText: '',
+    profile: null
 }
 export type initialProfileStateType = typeof initialState
 
-const profileReducer = (state: initialProfileStateType = initialState, action: updateNewPostAC | addPostAC): profilePageType => {
+const profileReducer = (state: initialProfileStateType = initialState, action: updateNewPostAC | addPostAC |setUserProfile): initialProfileStateType => {
 //debugger
     switch (action.type) {
         case 'ADD-POST':
@@ -57,6 +66,12 @@ const profileReducer = (state: initialProfileStateType = initialState, action: u
             return {
                 ...state,
                 newPostText: action.newText
+            }
+        }
+        case 'SET_USER_PROFILE':{
+            return{
+                ...state,
+                profile: action.profile
             }
         }
         default:

@@ -3,6 +3,7 @@ const UNFOLLOW = 'UNFOLLOW'
 const SET_USERS = 'SET_USERS'
 const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE'
 const SET_TOTAL_USERS_COUNT = 'SET_TOTAL_COUNT'
+const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING'
 
 
 export type usersType = {
@@ -24,45 +25,53 @@ type locationType = {
     country: string
     city: string
 }
-export type addPostAC = ReturnType<typeof followAC>
-export type updateNewPostAC = ReturnType<typeof unfollowAC>
-export type setUsersAC = ReturnType<typeof setUsersAC>
-export type setCurrentPageAC = ReturnType<typeof setCurrentPageAC>
-export type setTotalUsersCountAC = ReturnType<typeof setTotalUsersCountAC>
+export type addPost = ReturnType<typeof follow>
+export type updateNewPost = ReturnType<typeof unfollow>
+export type setUsers = ReturnType<typeof setUsers>
+export type setCurrentPage = ReturnType<typeof setCurrentPage>
+export type setTotalUsersCount = ReturnType<typeof setTotalUsersCount>
+export type toggleIsFetching = ReturnType<typeof toggleIsFetching>
 
-export const followAC = (userID: number) => {
+export const follow = (userID: number) => {
     return {
         type: FOLLOW,
         userID
     } as const
 }
 
-export const unfollowAC = (userID: number) => {
+export const unfollow = (userID: number) => {
     return {
         type: UNFOLLOW,
         userID
     } as const
 }
 
-export const setUsersAC = (users: Array<usersType>) => {
+export const setUsers = (users: Array<usersType>) => {
     return {
         type: SET_USERS,
         users
     } as const
 }
 
-export const setCurrentPageAC = (currentPage: number) => {
+export const setCurrentPage = (currentPage: number) => {
     return {
         type: SET_CURRENT_PAGE,
         currentPage
     } as const
 }
 
-export const setTotalUsersCountAC = (totalUsersCount: number) => {
+export const setTotalUsersCount = (totalUsersCount: number) => {
     return {
         type: SET_TOTAL_USERS_COUNT,
         totalUsersCount
     } as const
+}
+
+export const toggleIsFetching = (isFetching: boolean) => {
+    return {
+        type: TOGGLE_IS_FETCHING,
+        isFetching
+    } as const //обязательно для  action creator
 }
 
 let initialState = { // обьект для инициализации чтобы в функции combineReducer не было undefined
@@ -75,11 +84,11 @@ let initialState = { // обьект для инициализации чтоб�
 
 export type initialProfileStateType = typeof initialState
 
-export type commonActionType = updateNewPostAC | addPostAC | setUsersAC | setCurrentPageAC | setTotalUsersCountAC
+export type commonActionType = updateNewPost | addPost | setUsers | setCurrentPage | setTotalUsersCount | toggleIsFetching
 
 const usersReducer = (state: initialProfileStateType = initialState, action: commonActionType): initialProfileStateType => {
 //debugger
-    console.log(state)
+
     switch (action.type) {
         case FOLLOW:
             return {
@@ -115,6 +124,11 @@ const usersReducer = (state: initialProfileStateType = initialState, action: com
             return {
                 ...state,
                 totalUsersCount: action.totalUsersCount
+            }
+        case TOGGLE_IS_FETCHING:
+            return {
+                ...state,
+                isFetching: action.isFetching
             }
         default:
 
