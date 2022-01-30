@@ -1,20 +1,20 @@
 import React from "react";
-import {postType, setUserProfile} from "../../redux/profile-reducer";
+import {postType, profileType, setUserProfileAC} from "../../redux/profile-reducer";
 import Profile from "./Profile";
 import {AppStateType} from "../../redux/redux-store";
 import {connect} from "react-redux";
 import axios from "axios";
 import {Dispatch} from "redux";
-
-
-export type ProfilePropsType = mapStatePropsType & mapDispatchPropsType
+import {withRouter, RouteComponentProps} from "react-router-dom";
 
 class ProfileAPIContainer extends React.Component<ProfilePropsType> {
 
-
     componentDidMount() {
-
-        axios.get(`https://social-network.samuraijs.com/api/1.0/profile/2`).then(response => {
+        let userId = this.props.match.params.userId
+        if(!userId){
+            userId = "2"
+        }
+        axios.get(`https://social-network.samuraijs.com/api/1.0/profile/` + userId).then(response => {
             this.props.setUserProfile(response.data)
 
         })
@@ -28,18 +28,23 @@ class ProfileAPIContainer extends React.Component<ProfilePropsType> {
 
 export type mapStatePropsType = {
     posts: Array<postType>
-    profile: null | any
+    profile: null | profileType
 }
 
 export type mapDispatchPropsType = {
-    setUserProfile: (profile: any) => void
+    setUserProfile: (profile: profileType) => void
 }
 
+type userIdType ={
+    userId: string
+}
+
+export type ProfilePropsType = mapStatePropsType & mapDispatchPropsType & RouteComponentProps<userIdType>
 
 const mapDispatchToProps = (dispatch: Dispatch): mapDispatchPropsType => {
     return {
-        setUserProfile: (profile: any) => {
-            dispatch(setUserProfile(profile))
+        setUserProfile: (profile: profileType) => {
+            dispatch(setUserProfileAC(profile))
         }
     }
 }
@@ -50,8 +55,10 @@ const mapStateToProps = (state: AppStateType): mapStatePropsType => {
         profile: state.profilePage.profile
     }
 }
+// при использовании функции withRouter есть собственные параметры типизации RouteComponentProps
+let withUrlDataContainerComponent = withRouter(ProfileAPIContainer)
 
-const ProfileContainer = connect(mapStateToProps, mapDispatchToProps)(ProfileAPIContainer)
+const ProfileContainer = connect(mapStateToProps, mapDispatchToProps)(withUrlDataContainerComponent)
 
 
 export default ProfileContainer;

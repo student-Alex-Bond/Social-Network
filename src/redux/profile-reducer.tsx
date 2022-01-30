@@ -1,16 +1,35 @@
-export type profilePageType = {
-    posts: Array<postType>
-    newPostText: string
-}
 
 export type postType = {
     id: number
     message: string
     likesCount: number
 }
+export type profileType ={
+    "aboutMe"?: string
+    "contacts"?: {
+        "facebook": string,
+        "website": null,
+        "vk": string,
+        "twitter": string,
+        "instagram": string,
+        "youtube": null,
+        "github":string,
+        "mainLink": null
+    },
+    "lookingForAJob"?: boolean
+    "lookingForAJobDescription"?: string
+    "fullName"?: string
+    "userId"?: number
+    "photos"?: {
+        "small": string,
+        "large": string
+    }
+}
+
+
 export type addPostAC = ReturnType<typeof addPostActionCreator>
 export type updateNewPostAC = ReturnType<typeof updateNewPostActionCreator>
-export  type setUserProfile = ReturnType<typeof setUserProfile>
+export  type setUserProfileAC = ReturnType<typeof setUserProfileAC>
 
 export const addPostActionCreator = () => {
     return {
@@ -25,23 +44,24 @@ export const updateNewPostActionCreator = (text: string) => {
     } as const
 }
 
-export const setUserProfile = (profile: any) => {
+export const setUserProfileAC = (profile: profileType) => {
     return{
         type: 'SET_USER_PROFILE',
         profile
     } as const
 }
 
+
 let initialState = { // обьект для инициализации чтобы в функции combineReducer не было undefined
     posts: [
         {id: 1, message: 'Hi, how are you', likesCount: 15},
         {id: 2, message: 'I\'m fine', likesCount: 5}] as Array<postType>,
     newPostText: '',
-    profile: null
+    profile: null as profileType | null
 }
 export type initialProfileStateType = typeof initialState
 
-const profileReducer = (state: initialProfileStateType = initialState, action: updateNewPostAC | addPostAC |setUserProfile): initialProfileStateType => {
+const profileReducer = (state: initialProfileStateType = initialState, action: updateNewPostAC | addPostAC | setUserProfileAC ): initialProfileStateType => {
 //debugger
     switch (action.type) {
         case 'ADD-POST':
