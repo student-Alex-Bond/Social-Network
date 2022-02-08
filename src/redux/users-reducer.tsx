@@ -1,9 +1,12 @@
+
+
 const FOLLOW = 'FOLLOW'
 const UNFOLLOW = 'UNFOLLOW'
 const SET_USERS = 'SET_USERS'
 const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE'
 const SET_TOTAL_USERS_COUNT = 'SET_TOTAL_COUNT'
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING'
+const TOGGLE_IS_FOLLOWING_PROGRESS = 'TOGGLE_IS_FOLLOWING_PROGRESS'
 
 
 export type usersType = {
@@ -31,6 +34,7 @@ export type setUsers = ReturnType<typeof setUsers>
 export type setCurrentPage = ReturnType<typeof setCurrentPage>
 export type setTotalUsersCount = ReturnType<typeof setTotalUsersCount>
 export type toggleIsFetching = ReturnType<typeof toggleIsFetching>
+export type toggleFollowingInProgress = ReturnType<typeof toggleFollowingInProgress>
 
 export const follow = (userID: number) => {
     return {
@@ -74,19 +78,35 @@ export const toggleIsFetching = (isFetching: boolean) => {
     } as const //обязательно для  action creator
 }
 
+export const toggleFollowingInProgress = (isFetching: boolean, userId: number) => {
+    return {
+        type: TOGGLE_IS_FOLLOWING_PROGRESS,
+        isFetching,
+        userId
+    } as const
+}
+
 let initialState = { // обьект для инициализации чтобы в функции combineReducer не было undefined
     users: [] as Array<usersType>,
     pageSize: 5,
     totalUsersCount: 0,
     currentPage: 1,
-    isFetching: false
+    isFetching: false,
+    followingInProgress: [] as Array<number>
 }
 
 export type initialProfileStateType = typeof initialState
 
-export type commonActionType = updateNewPost | addPost | setUsers | setCurrentPage | setTotalUsersCount | toggleIsFetching
+export type ActionType =
+    updateNewPost
+    | addPost
+    | setUsers
+    | setCurrentPage
+    | setTotalUsersCount
+    | toggleIsFetching
+    | toggleFollowingInProgress
 
-const usersReducer = (state: initialProfileStateType = initialState, action: commonActionType): initialProfileStateType => {
+const usersReducer = (state: initialProfileStateType = initialState, action: ActionType): initialProfileStateType => {
 //debugger
 
     switch (action.type) {
@@ -129,6 +149,13 @@ const usersReducer = (state: initialProfileStateType = initialState, action: com
             return {
                 ...state,
                 isFetching: action.isFetching
+            }
+        case TOGGLE_IS_FOLLOWING_PROGRESS:
+            return {
+                ...state,
+                followingInProgress: action.isFetching
+                    ? [...state.followingInProgress, action.userId]
+                    : state.followingInProgress.filter(id => id != action.userId )
             }
         default:
 
