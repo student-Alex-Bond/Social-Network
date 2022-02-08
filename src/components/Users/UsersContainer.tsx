@@ -9,9 +9,9 @@ import {
     unfollow,
     usersType
 } from "../../redux/users-reducer";
-import axios from "axios";
 import Users from './Users';
 import Preloader from "../common/preloader/Preloader";
+import {userAPI} from "../../API/API";
 
 type mapStateToPropsType = {
     users: Array<usersType>
@@ -33,13 +33,12 @@ type mapDispatchToPropsType = {
 class UsersAPIComponent extends React.Component<usersPropsType> {
 
     componentDidMount() {
+        // функция getUsers обертка в файле API.ts
         this.props.toggleIsFetching(true)
-        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPage}&count=${this.props.pageSize}`, {
-            withCredentials: true
-        }).then(response => {
+        userAPI.getUsers(this.props.currentPage, this.props.pageSize).then(data => {
             this.props.toggleIsFetching(false)
-            this.props.setUsers(response.data.items)
-            this.props.setTotalUsersCount(response.data.totalCount)
+            this.props.setUsers(data.items)
+            this.props.setTotalUsersCount(data.totalCount)
 
         })// когда используешь бэктики  строку нельзя переносить на новую строку ствать пробелы все нажатия клавиш воспринимаются буквально
     }
@@ -48,11 +47,9 @@ class UsersAPIComponent extends React.Component<usersPropsType> {
 
         this.props.setCurrentPage(currentPage)
         this.props.toggleIsFetching(true)
-        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${currentPage}&count=${this.props.pageSize}`, {
-            withCredentials: true
-        }).then(response => {
+        userAPI.getUsers(currentPage, this.props.pageSize).then(data => {
             this.props.toggleIsFetching(false)
-            this.props.setUsers(response.data.items)
+            this.props.setUsers(data.items)
         })
     }
 
