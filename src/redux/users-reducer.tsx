@@ -1,3 +1,6 @@
+import {userAPI} from "../API/API";
+import {Dispatch} from "redux";
+import {AppStateType} from "./redux-store";
 
 
 const FOLLOW = 'FOLLOW'
@@ -35,6 +38,7 @@ export type setCurrentPage = ReturnType<typeof setCurrentPage>
 export type setTotalUsersCount = ReturnType<typeof setTotalUsersCount>
 export type toggleIsFetching = ReturnType<typeof toggleIsFetching>
 export type toggleFollowingInProgress = ReturnType<typeof toggleFollowingInProgress>
+
 
 export const follow = (userID: number) => {
     return {
@@ -86,6 +90,19 @@ export const toggleFollowingInProgress = (isFetching: boolean, userId: number) =
     } as const
 }
 
+type getStateType = () => AppStateType
+
+export const getUsersThunkCreator = (currentPage: number, pageSize: number) =>  {
+    return async (dispatch: Dispatch, getSate: getStateType) =>  {
+        dispatch(toggleIsFetching(true))
+
+        let data = await userAPI.getUsers(currentPage, pageSize)
+            dispatch(toggleIsFetching(false))
+            dispatch(setUsers(data.items))
+            dispatch(setTotalUsersCount(data.totalCount))
+
+    }
+}
 let initialState = { // обьект для инициализации чтобы в функции combineReducer не было undefined
     users: [] as Array<usersType>,
     pageSize: 5,
@@ -105,6 +122,7 @@ export type ActionType =
     | setTotalUsersCount
     | toggleIsFetching
     | toggleFollowingInProgress
+
 
 const usersReducer = (state: initialProfileStateType = initialState, action: ActionType): initialProfileStateType => {
 //debugger
@@ -155,7 +173,7 @@ const usersReducer = (state: initialProfileStateType = initialState, action: Act
                 ...state,
                 followingInProgress: action.isFetching
                     ? [...state.followingInProgress, action.userId]
-                    : state.followingInProgress.filter(id => id != action.userId )
+                    : state.followingInProgress.filter(id => id != action.userId)
             }
         default:
 
