@@ -9,6 +9,7 @@ import DialogsContainer from './components/Dialogs/DialogsContainer';
 import ProfileContainer from "./components/Profile/ProfileContainer";
 import UsersContainer from './components/Users/UsersContainer';
 import HeaderContainer from "./components/Header/HeaderContainer";
+import LoginPage from './components/Login/LoginPage';
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
                 <Route path='/music' component={Music}/>
                 <Route path='/news' component={News}/>
                 <Route path='/settings' component={Settings}/>
+                <Route path='/login' component={LoginPage}/>
             </div>
         </div>
 

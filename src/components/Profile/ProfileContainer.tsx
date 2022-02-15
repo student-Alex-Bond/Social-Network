@@ -3,7 +3,7 @@ import {postType, profileType, userProfile} from "../../redux/profile-reducer";
 import Profile from "./Profile";
 import {AppStateType} from "../../redux/redux-store";
 import {connect} from "react-redux";
-import {withRouter, RouteComponentProps} from "react-router-dom";
+import {withRouter, RouteComponentProps, Redirect} from "react-router-dom";
 
 class ProfileAPIContainer extends React.Component<ProfilePropsType> {
 
@@ -23,7 +23,13 @@ class ProfileAPIContainer extends React.Component<ProfilePropsType> {
         // })
     }
 
+
+
     render() {
+        if(!this.props.isAuth) {
+            return <Redirect to={'/login'}/>
+        }
+
         return <Profile {...this.props}/>;
     }
 }
@@ -32,6 +38,7 @@ class ProfileAPIContainer extends React.Component<ProfilePropsType> {
 export type mapStatePropsType = {
     posts: Array<postType>
     profile: null | profileType
+    isAuth: boolean
 }
 
 export type mapDispatchPropsType = {
@@ -49,7 +56,8 @@ export type ProfilePropsType = mapStatePropsType & mapDispatchPropsType & RouteC
 const mapStateToProps = (state: AppStateType): mapStatePropsType => {
     return {
         posts: state.profilePage.posts,
-        profile: state.profilePage.profile
+        profile: state.profilePage.profile,
+        isAuth: state.auth.isAuth
     }
 }
 // при использовании функции withRouter есть собственные параметры типизации RouteComponentProps
