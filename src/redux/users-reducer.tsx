@@ -31,8 +31,8 @@ type locationType = {
     country: string
     city: string
 }
-export type addPost = ReturnType<typeof follow>
-export type updateNewPost = ReturnType<typeof unfollow>
+export type addPost = ReturnType<typeof followSuccess>
+export type updateNewPost = ReturnType<typeof unfollowSuccess>
 export type setUsers = ReturnType<typeof setUsers>
 export type setCurrentPage = ReturnType<typeof setCurrentPage>
 export type setTotalUsersCount = ReturnType<typeof setTotalUsersCount>
@@ -40,14 +40,14 @@ export type toggleIsFetching = ReturnType<typeof toggleIsFetching>
 export type toggleFollowingInProgress = ReturnType<typeof toggleFollowingInProgress>
 
 
-export const follow = (userID: number) => {
+export const followSuccess = (userID: number) => {
     return {
         type: FOLLOW,
         userID
     } as const
 }
 
-export const unfollow = (userID: number) => {
+export const unfollowSuccess = (userID: number) => {
     return {
         type: UNFOLLOW,
         userID
@@ -92,7 +92,7 @@ export const toggleFollowingInProgress = (isFetching: boolean, userId: number) =
 
 type getStateType = () => AppStateType
 
-export const getUsersThunkCreator = (currentPage: number, pageSize: number) =>  {
+export const getUsers = (currentPage: number, pageSize: number) =>  {
     return async (dispatch: Dispatch, getSate: getStateType) =>  {
         dispatch(toggleIsFetching(true))
 
@@ -103,6 +103,36 @@ export const getUsersThunkCreator = (currentPage: number, pageSize: number) =>  
 
     }
 }
+
+export const follow = (userId: number) =>  {
+    return async (dispatch: Dispatch, getSate: getStateType) =>  {
+        dispatch(toggleFollowingInProgress(true, userId))
+        userAPI.follow(userId).then(response => {
+            if (response.data.resultCode === 0) {
+                dispatch(followSuccess(userId))
+            }
+            dispatch(toggleFollowingInProgress(false, userId))
+        })
+
+
+    }
+}
+
+export const unfollow = (userId: number) =>  {
+    return async (dispatch: Dispatch, getSate: getStateType) =>  {
+
+        dispatch(toggleFollowingInProgress(true, userId))
+        userAPI.unfollow(userId).then(response => {
+            if (response.data.resultCode === 0) {
+                dispatch(unfollowSuccess(userId))
+            }
+            dispatch(toggleFollowingInProgress(false, userId))
+        })
+
+
+    }
+}
+
 let initialState = { // обьект для инициализации чтобы в функции combineReducer не было undefined
     users: [] as Array<usersType>,
     pageSize: 5,

@@ -1,3 +1,5 @@
+import {Dispatch} from "redux";
+import {userAPI} from "../API/API";
 
 export type postType = {
     id: number
@@ -29,7 +31,7 @@ export type profileType ={
 
 export type addPostAC = ReturnType<typeof addPostActionCreator>
 export type updateNewPostAC = ReturnType<typeof updateNewPostActionCreator>
-export  type setUserProfileAC = ReturnType<typeof setUserProfileAC>
+export  type setUserProfile = ReturnType<typeof setUserProfile>
 
 export const addPostActionCreator = () => {
     return {
@@ -44,13 +46,20 @@ export const updateNewPostActionCreator = (text: string) => {
     } as const
 }
 
-export const setUserProfileAC = (profile: profileType) => {
+export const setUserProfile = (profile: profileType) => {
     return{
         type: 'SET_USER_PROFILE',
         profile
     } as const
 }
+export const userProfile =(userId: string) => {
+    return (dispatch: Dispatch) => {
+        userAPI.getProfile(userId).then(response => {
+            dispatch(setUserProfile(response.data))
 
+        })
+    }
+}
 
 let initialState = { // обьект для инициализации чтобы в функции combineReducer не было undefined
     posts: [
@@ -61,7 +70,7 @@ let initialState = { // обьект для инициализации чтоб�
 }
 export type initialProfileStateType = typeof initialState
 
-const profileReducer = (state: initialProfileStateType = initialState, action: updateNewPostAC | addPostAC | setUserProfileAC ): initialProfileStateType => {
+const profileReducer = (state: initialProfileStateType = initialState, action: updateNewPostAC | addPostAC | setUserProfile ): initialProfileStateType => {
 //debugger
     switch (action.type) {
         case 'ADD-POST':
