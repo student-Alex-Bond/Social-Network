@@ -3,8 +3,7 @@ import {postType, profileType, userProfile} from "../../redux/profile-reducer";
 import Profile from "./Profile";
 import {AppStateType} from "../../redux/redux-store";
 import {connect} from "react-redux";
-import {withRouter, RouteComponentProps, Redirect} from "react-router-dom";
-import {withAuthRedirect} from "../../hoc/WithAuthRedirect";
+import {withRouter, RouteComponentProps} from "react-router-dom";
 import {compose} from "redux";
 
 class ProfileAPIContainer extends React.Component<ProfilePropsType> {
@@ -61,8 +60,8 @@ const mapStateToProps = (state: AppStateType): mapStatePropsType => {
 
 export default compose<React.ComponentType>(
     connect(mapStateToProps, {userProfile}),
-    withRouter,
-    withAuthRedirect)
+    withRouter
+)
 (ProfileAPIContainer)
 
 //
