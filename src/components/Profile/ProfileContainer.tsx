@@ -1,5 +1,5 @@
 import React from "react";
-import {postType, profileType, userProfile} from "../../redux/profile-reducer";
+import {getStatus, postType, profileType, updateStatus, userProfile} from "../../redux/profile-reducer";
 import Profile from "./Profile";
 import {AppStateType} from "../../redux/redux-store";
 import {connect} from "react-redux";
@@ -14,6 +14,8 @@ class ProfileAPIContainer extends React.Component<ProfilePropsType> {
             userId = "2"
         }
         this.props.userProfile(userId)
+
+        this.props.getStatus(userId)
         // let userId = this.props.match.params.userId
         // if(!userId){
         //     userId = "2"
@@ -26,7 +28,7 @@ class ProfileAPIContainer extends React.Component<ProfilePropsType> {
 
 
     render() {
-        return <Profile {...this.props}/>;
+        return <Profile {...this.props} status={this.props.status} updateStatus={this.props.updateStatus}/>;
     }
 }
 
@@ -34,11 +36,13 @@ class ProfileAPIContainer extends React.Component<ProfilePropsType> {
 export type mapStatePropsType = {
     posts: Array<postType>
     profile: null | profileType
-
+    status: string
 }
 
 export type mapDispatchPropsType = {
     userProfile: (userId: string) => void
+    getStatus: (userId: string) => void
+    updateStatus: (status: string) => void
 }
 
 type userIdType = {
@@ -49,17 +53,15 @@ export type ProfilePropsType = mapStatePropsType & mapDispatchPropsType & RouteC
 
 
 const mapStateToProps = (state: AppStateType): mapStatePropsType => {
-
-
     return {
         posts: state.profilePage.posts,
         profile: state.profilePage.profile,
-
+        status: state.profilePage.status
     }
 }
 
 export default compose<React.ComponentType>(
-    connect(mapStateToProps, {userProfile}),
+    connect(mapStateToProps, {userProfile, updateStatus, getStatus}),
     withRouter
 )
 (ProfileAPIContainer)

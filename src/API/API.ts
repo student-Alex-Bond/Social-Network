@@ -18,8 +18,21 @@ export const userAPI = {
     unfollow(userId: number) {
         return instanceAxios.delete(`follow/${userId}`)
     },
-        getProfile(userId: string) {
-     return instanceAxios.get(`profile/` + userId)
+    getProfile(userId: string) {
+        console.warn('Obsolete method. Please profileAPI object')
+        return profileAPI.getProfile(userId)
+    }
+}
+
+export const profileAPI = {
+    getProfile(userId: string) {
+        return instanceAxios.get(`profile/` + userId)
+    },
+    getStatus(userId: string) {
+        return instanceAxios.get(`profile/status/` + userId)
+    },
+    updateStatus(status: string) {
+        return instanceAxios.put(`profile/status`, {status: status})
     }
 }
 export const auth = {

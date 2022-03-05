@@ -2,6 +2,7 @@ import React, {ChangeEvent} from 'react';
 
 type ProfileStatusType = {
     status: string
+    updateStatus: (status: string) => void
 }
 
 
@@ -9,7 +10,7 @@ class ProfileStatus extends React.Component<ProfileStatusType> {
 
     state ={
         editMode: false,
-        value: this.props.status
+        status: this.props.status
     }
 
     activateEditMode = () => {
@@ -19,24 +20,27 @@ class ProfileStatus extends React.Component<ProfileStatusType> {
        })
     }
     deActivateEditMode = () => {
+
+        this.props.updateStatus(this.state.status)
         return this.setState({
-            editMode: false
+            editMode: false,
         })
+
     }
 
     handleOnchange = (e: ChangeEvent<HTMLInputElement>) => {
        return this.setState({
-            value: e.currentTarget.value
+           status: e.currentTarget.value
         })
     }
     render() {
         return (  <div>
             { !this.state.editMode
                 ? <div>
-                    <span onDoubleClick={this.activateEditMode}>{this.state.value}</span>
+                    <span onDoubleClick={this.activateEditMode}>{this.props.status || 'no status'}</span>
                 </div>
                 :<div>
-                <input autoFocus={true} value={this.state.value} onBlur={this.deActivateEditMode} onChange={this.handleOnchange}/>
+                <input autoFocus={true} value={this.state.status} onBlur={this.deActivateEditMode} onChange={this.handleOnchange}/>
                 </div>
             }
         </div>)

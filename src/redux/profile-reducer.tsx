@@ -1,5 +1,6 @@
 import {Dispatch} from "redux";
-import {userAPI} from "../API/API";
+import {profileAPI, userAPI} from "../API/API";
+
 
 export type postType = {
     id: number
@@ -32,7 +33,7 @@ export type profileType ={
 export type addPostAC = ReturnType<typeof addPostActionCreator>
 export type updateNewPostAC = ReturnType<typeof updateNewPostActionCreator>
 export  type setUserProfile = ReturnType<typeof setUserProfile>
-
+export type setStatus = ReturnType<typeof setStatus>
 export const addPostActionCreator = () => {
     return {
         type: 'ADD-POST'
@@ -61,16 +62,43 @@ export const userProfile =(userId: string) => {
     }
 }
 
+export const setStatus= (status: string) => {
+    return{
+        type: 'SET_STATUS',
+        status: status
+    } as const
+}
+
+export const getStatus = (userId: string) => {
+    return (dispatch: Dispatch) => {
+        profileAPI.getStatus(userId).then((response)=>{
+            dispatch(setStatus(response.data))
+        })
+    }
+}
+
+export const updateStatus = (status: string) => {
+
+    return (dispatch: Dispatch) => {
+        profileAPI.updateStatus(status).then((response)=>{
+            if (response.data.resultCode === 0){
+                dispatch(setStatus(status))
+            }
+        })
+    }
+}
+
 let initialState = { // обьект для инициализации чтобы в функции combineReducer не было undefined
     posts: [
         {id: 1, message: 'Hi, how are you', likesCount: 15},
         {id: 2, message: 'I\'m fine', likesCount: 5}] as Array<postType>,
     newPostText: '',
-    profile: null as profileType | null
+    profile: null as profileType | null,
+    status: ''
 }
 export type initialProfileStateType = typeof initialState
 
-const profileReducer = (state: initialProfileStateType = initialState, action: updateNewPostAC | addPostAC | setUserProfile ): initialProfileStateType => {
+const profileReducer = (state: initialProfileStateType = initialState, action: updateNewPostAC | addPostAC | setUserProfile | setStatus ): initialProfileStateType => {
 //debugger
     switch (action.type) {
         case 'ADD-POST':
@@ -101,6 +129,12 @@ const profileReducer = (state: initialProfileStateType = initialState, action: u
             return{
                 ...state,
                 profile: action.profile
+            }
+        }
+        case 'SET_STATUS': {
+            return {
+                ...state,
+                status: action.status
             }
         }
         default:
