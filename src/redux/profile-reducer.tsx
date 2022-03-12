@@ -31,21 +31,15 @@ export type profileType ={
 
 
 export type addPostAC = ReturnType<typeof addPostActionCreator>
-export type updateNewPostAC = ReturnType<typeof updateNewPostActionCreator>
 export  type setUserProfile = ReturnType<typeof setUserProfile>
 export type setStatus = ReturnType<typeof setStatus>
-export const addPostActionCreator = () => {
+export const addPostActionCreator = (newPostText: string) => {
     return {
-        type: 'ADD-POST'
+        type: 'ADD-POST',
+        newPostText
     } as const
 }
 
-export const updateNewPostActionCreator = (text: string) => {
-    return {
-        type: 'UPDATE-POST-CHANGE',
-        newText: text
-    } as const
-}
 
 export const setUserProfile = (profile: profileType) => {
     return{
@@ -98,7 +92,7 @@ let initialState = { // обьект для инициализации чтоб�
 }
 export type initialProfileStateType = typeof initialState
 
-const profileReducer = (state: initialProfileStateType = initialState, action: updateNewPostAC | addPostAC | setUserProfile | setStatus ): initialProfileStateType => {
+const profileReducer = (state: initialProfileStateType = initialState, action:  addPostAC | setUserProfile | setStatus ): initialProfileStateType => {
 //debugger
     switch (action.type) {
         case 'ADD-POST':
@@ -106,7 +100,7 @@ const profileReducer = (state: initialProfileStateType = initialState, action: u
             // stateCopy.posts = [...state.posts]
             let newPost = {
                 id: 3,
-                message: state.newPostText,
+                message: action.newPostText,
                 likesCount: 0,
             }
             // stateCopy.posts.push(newPost);
@@ -117,14 +111,6 @@ const profileReducer = (state: initialProfileStateType = initialState, action: u
                 newPostText: '',
                 posts: state.posts.concat(newPost)
             }
-        case  'UPDATE-POST-CHANGE': {
-            // stateCopy.newPostText = action.newText ;
-
-            return {
-                ...state,
-                newPostText: action.newText
-            }
-        }
         case 'SET_USER_PROFILE':{
             return{
                 ...state,

@@ -17,16 +17,13 @@ export type dialogsPageType = {
 export type InitialDialogsStateType = typeof initialState
 
 export type sendMessageAC =ReturnType<typeof sendMessageCreator> // возвращает типизацию на основе ActionCreator'a если не получается то в функции ActionCreator возвращаемый обьект дожен быть константой нужно написать  'as const'
-export type updateNewMessageAC =ReturnType<typeof updateNewMessageActionCreator>
 
-export const sendMessageCreator = ()=> {
+
+export const sendMessageCreator = (newMessageBody: string)=> {
     return {
-        type: 'SEND-MESSAGE'
+        type: 'SEND-MESSAGE',
+        newMessageBody
     } as const
-}
-
-export const  updateNewMessageActionCreator = (body: string) => {
-    return {type: 'UPDATE-NEW-MESSAGE-BODY', body: body} as const// важно не забывать типизировать как ''''as const'''''
 }
 
 let initialState = { // обьект для инициализации, чтобы в функции combineReducer не было undefined
@@ -44,21 +41,14 @@ let initialState = { // обьект для инициализации, чтоб
         {id: 4, message: 'i am not understand'},
         {id: 5, message: 'yes of cos'},
     ] as Array<messageType>,
-    newMessageBody: '',
+    newMessageBody: ''
 }
 
-const dialogsReducer = (state: InitialDialogsStateType = initialState , action: sendMessageAC | updateNewMessageAC): dialogsPageType => {
+const dialogsReducer = (state: InitialDialogsStateType = initialState , action: sendMessageAC): dialogsPageType => {
 
     switch(action.type){
-        case 'UPDATE-NEW-MESSAGE-BODY':
-            //state.newMessageBody = action.body
-            return {
-                ...state,
-                newMessageBody: state.newMessageBody = action.body
-
-            }
         case 'SEND-MESSAGE':
-            let newMessage = {id: 6, message: state.newMessageBody}
+            let newMessage = {id: 6, message: action.newMessageBody}
             //state.messages.push({id: 6, message: body})
            // state.newMessageBody = '';
             return {
