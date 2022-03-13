@@ -11,7 +11,7 @@ class ProfileAPIContainer extends React.Component<ProfilePropsType> {
     componentDidMount() {
         let userId = this.props.match.params.userId
         if (!userId) {
-            userId = "2"
+            userId = String(this.props.authorizedUserId)
         }
         this.props.userProfile(userId)
 
@@ -37,6 +37,8 @@ export type mapStatePropsType = {
     posts: Array<postType>
     profile: null | profileType
     status: string
+    authorizedUserId: number | null
+    isAuth: boolean
 }
 
 export type mapDispatchPropsType = {
@@ -56,7 +58,9 @@ const mapStateToProps = (state: AppStateType): mapStatePropsType => {
     return {
         posts: state.profilePage.posts,
         profile: state.profilePage.profile,
-        status: state.profilePage.status
+        status: state.profilePage.status,
+        authorizedUserId: state.auth.userId,
+        isAuth: state.auth.isAuth
     }
 }
 

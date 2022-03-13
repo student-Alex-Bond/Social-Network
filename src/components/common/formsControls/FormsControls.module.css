@@ -8,3 +8,11 @@
     font-size: 20px;
     color: red
 }
+
+.summaryError {
+    width: 150px;
+    text-align: center;
+    padding: 5px;
+    color: rosybrown;
+    border: 1px solid red;
+}
