@@ -1,8 +1,8 @@
 import {Dispatch} from "redux";
-import {ThunkDispatch} from "redux-thunk";
 import {auth} from "../API/API";
-import {AppDispatch} from "./redux-store";
 import {stopSubmit} from "redux-form"
+import {ThunkAction} from 'redux-thunk'
+import {AppStateType} from "./redux-store";
 
 const SET_USER_DATA = 'SET-USER-DATA'
 
@@ -18,8 +18,8 @@ export const setAuthUserData = (userId: number | null, email: string | null, log
     return {type: SET_USER_DATA, payload: {userId, email, login, isAuth}}
 }
 
-export const authorization = () => (dispatch: AppDispatch) => {
-    auth.me()
+export const authorization = () => (dispatch: Dispatch<ActionType>) => {
+   return auth.me()
         .then(response => {
             if (response.data.resultCode === 0) {
                 let {id, email, login, isAuth} = response.data.data
@@ -29,8 +29,8 @@ export const authorization = () => (dispatch: AppDispatch) => {
 }
 
 
-export const login = (email: string, password: string, rememberMe: boolean) => (dispatch: ThunkDispatch<any, any,
-    any>) => {
+export const login = (email: string, password: string, rememberMe: boolean): ThunkAction<void, AppStateType, unknown, ActionType> =>
+    (dispatch) => {
     auth.login(email, password, rememberMe)
         .then(response => {
             if (response.data.resultCode === 0) {
@@ -38,8 +38,8 @@ export const login = (email: string, password: string, rememberMe: boolean) => (
             } else {
                 let message = response.data.messages.length > 0 ? response.data.messages[0] : "Some Error"
                 console.log(message)
-                let action = stopSubmit('login', {_error: message});
-                dispatch(action);
+                // let action = stopSubmit('login', {_error: message});
+                // dispatch(action);
             }
         })
 }

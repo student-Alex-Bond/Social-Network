@@ -12,18 +12,12 @@ class ProfileAPIContainer extends React.Component<ProfilePropsType> {
         let userId = this.props.match.params.userId
         if (!userId) {
             userId = String(this.props.authorizedUserId)
+            if(!userId){
+                this.props.history.push('/login')
+            }
         }
         this.props.userProfile(userId)
-
         this.props.getStatus(userId)
-        // let userId = this.props.match.params.userId
-        // if(!userId){
-        //     userId = "2"
-        // }
-        // axios.get(`https://social-network.samuraijs.com/api/1.0/profile/` + userId).then(response => {
-        //     this.props.setUserProfile(response.data)
-        //
-        // })
     }
 
 

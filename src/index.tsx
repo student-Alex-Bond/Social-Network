@@ -12,7 +12,7 @@ import {Provider} from "react-redux";
 ReactDOM.render(
     <BrowserRouter>
         <Provider store={store}>
-            <App/>
+            <App />
         </Provider>
     </BrowserRouter>,
     document.getElementById('root')
