@@ -1,5 +1,5 @@
 import {Dispatch} from "redux";
-import {authorization, setUserDataType} from "./auth-reducer";
+import {authorization} from "./auth-reducer";
 
 const InitialState = {
     initialized: false
@@ -18,6 +18,7 @@ export const appReducer = (state: InitialStateType = InitialState, action: Actio
 export const setInitializeSuccessAC = () => ({type: 'SET-INITIALISED'} as const)
 
 export const initializeApp = () => (dispatch: Dispatch<any>) => {
+
     let promise = dispatch(authorization())
     Promise.all([promise]).then(()=> dispatch(setInitializeSuccessAC()))
 }

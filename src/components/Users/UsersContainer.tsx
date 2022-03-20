@@ -4,16 +4,22 @@ import {AppStateType} from "../../redux/redux-store";
 import {
     follow,
     unfollow,
-    getUsers,
     setCurrentPage,
     toggleFollowingInProgress,
-
-    usersType
+    usersType, requestUsers
 } from "../../redux/users-reducer";
 import Users from './Users';
 import Preloader from "../common/preloader/Preloader";
 import {withAuthRedirect} from "../../hoc/WithAuthRedirect";
 import {compose} from "redux";
+import {
+    getUsers,
+    getPgeSize,
+    getTotalUsersCount,
+    getCurrentPage,
+    getIsFetching,
+    followingInProgress
+} from "../../redux/users-selectors";
 
 
 type mapStateToPropsType = {
@@ -26,7 +32,7 @@ type mapStateToPropsType = {
 }
 type mapDispatchToPropsType = {
     setCurrentPage: (currentPage: number) => void
-    getUsers: (currentPage: number, pageSize: number) => void
+    requestUsers: (currentPage: number, pageSize: number) => void
     follow: (userId: number) => void
     unfollow: (userId: number) => void
 }
@@ -46,17 +52,12 @@ class UsersAPIComponent extends React.Component<usersPropsType> {
         // // когда используешь бэктики  строку нельзя
         // // переносить на новую строку ствать пробелы
         // // все нажатия клавиш воспринимаются буквально
-        this.props.getUsers(this.props.currentPage, this.props.pageSize)
+        this.props.requestUsers(this.props.currentPage, this.props.pageSize)
     }
 
     onPageChanged = (currentPage: number) => {
-        this.props.getUsers(currentPage, this.props.pageSize)
-        // this.props.setCurrentPage(currentPage)
-        // this.props.toggleIsFetching(true)
-        // userAPI.getUsers(currentPage, this.props.pageSize).then(data => {
-        //     this.props.toggleIsFetching(false)
-        //     this.props.setUsers(data.items)
-        // })
+        this.props.requestUsers(currentPage, this.props.pageSize)
+
     }
 
     render() {
@@ -79,52 +80,17 @@ class UsersAPIComponent extends React.Component<usersPropsType> {
 
 const mapStateToProps = (state: AppStateType): mapStateToPropsType => {
     return {
-        users: state.usersPage.users,
-        pageSize: state.usersPage.pageSize,
-        totalUsersCount: state.usersPage.totalUsersCount,
-        currentPage: state.usersPage.currentPage,
-        isFetching: state.usersPage.isFetching,
-        followingInProgress: state.usersPage.followingInProgress,
+        users: getUsers(state),
+        pageSize: getPgeSize(state),
+        totalUsersCount: getTotalUsersCount(state),
+        currentPage: getCurrentPage(state),
+        isFetching: getIsFetching(state),
+        followingInProgress: followingInProgress(state),
     }
 }
-// полная запись функции mapDispatchToProps
-// const mapDispatchToProps = (dispatch: Dispatch): mapDispatchToPropsType => {
-//     return {
-//         follow: (userID: number) => {
-//             dispatch(followAC(userID))
-//         },
-//         unfollow: (userID: number) => {
-//             dispatch(unfollowAC(userID))
-//         },
-//         setUsers: (users: Array<usersType>) => {
-//             dispatch(setUsersAC(users))
-//         },
-//         setCurrentPage: (currentPage: number) => {
-//             dispatch(setCurrentPageAC(currentPage))
-//         },
-//         setTotalUsersCount: (totalCount: number) => {
-//             dispatch(setTotalUsersCountAC(totalCount))
-//         },
-//         toggleIsFetching: (isFetching:boolean ) => {
-//             dispatch(toggleIsFetchingAC(isFetching))
-//         }
-//     }
-// }
-
-// сокращенная запись mapDispatchToProps это обьект который сразу прокидывается  в функцию connect вторым параметром
-// {follow, unfollow, setUsers, setCurrentPage, setTotalUsersCount, toggleIsFetching}
 
 export type usersPropsType = mapStateToPropsType & mapDispatchToPropsType
-// const UsersContainer = connect(mapStateToProps,
-//     {
-//         follow,
-//         unfollow,
-//         setCurrentPage,
-//         toggleFollowingInProgress,
-//         getUsers
-//     })(UsersAPIComponent)
-//
-// export default withAuthRedirect(UsersContainer);
+
 
 export default compose<React.ComponentType>(
     withAuthRedirect,
@@ -134,7 +100,7 @@ export default compose<React.ComponentType>(
         unfollow,
         setCurrentPage,
         toggleFollowingInProgress,
-        getUsers
+        requestUsers
     })
 
 )(UsersAPIComponent)

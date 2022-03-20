@@ -92,9 +92,10 @@ export const toggleFollowingInProgress = (isFetching: boolean, userId: number) =
 
 type getStateType = () => AppStateType
 
-export const getUsers = (currentPage: number, pageSize: number) =>  {
+export const requestUsers = (currentPage: number, pageSize: number) =>  {
     return async (dispatch: Dispatch, getSate: getStateType) =>  {
         dispatch(toggleIsFetching(true))
+        dispatch(setCurrentPage(currentPage))
 
         let data = await userAPI.getUsers(currentPage, pageSize)
             dispatch(toggleIsFetching(false))
