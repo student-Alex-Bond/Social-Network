@@ -16,7 +16,7 @@ type FormData = {
     newPostText: string
 }
 
-function NewPost(props: NewPostsProps) {
+const  NewPost = React.memo((props: NewPostsProps) => {
 
 
     let onAddPost = (values: FormData) => {
@@ -29,13 +29,13 @@ function NewPost(props: NewPostsProps) {
             <AddPostFormRedux onSubmit={onAddPost}/>
         </div>
     );
-}
+})
 
 const AddPost = (props: InjectedFormProps<FormData>) => {
     return (
         <form onSubmit={props.handleSubmit}>
             <Field name={'newPostText'}
-                   placeholder={'new your post'}
+                   placeholder={'your new post'}
                    component={TextArea}
                    validate={[requiredField, maxLength10]}
             />

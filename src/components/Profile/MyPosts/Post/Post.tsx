@@ -6,7 +6,7 @@ type PostPropsType = {
     'likesCount': number
 }
 
-function Post(props: PostPropsType) {
+const  Post = React.memo((props: PostPropsType) => {
 
     return(
     <div className={style.posts}>
@@ -16,5 +16,5 @@ function Post(props: PostPropsType) {
             <div><span>like </span>{props.likesCount}</div>
         </div>
     </div>);
-}
+})
 export default Post;
