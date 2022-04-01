@@ -4,6 +4,7 @@ import styles from "./Users.module.css";
 import {usersType} from "../../redux/users-reducer";
 import {NavLink} from 'react-router-dom';
 import {Paginator} from "../common/Padinator/Paginator";
+import {User} from "./User";
 
 
 type usersProps = {
@@ -28,36 +29,12 @@ const Users = (props: usersProps) => {
                                currentPage={props.currentPage}
                                onPageChanged={props.onPageChanged}/>
                 </div>
-                {
-                    props.users.map(user => <div key={user.id}>
-                <span>
-                    <div>
-                        <NavLink to={'/profile/' + user.id}>
-                        <img src={user.photos.small != null ? user.photos.small : ava_user} className={styles.userPhoto}
-                             alt={'ava user'}/>
-                            </NavLink>
-                    </div>
-                    <div>
-                        {user.followed
-                            ? <button disabled={props.followingInProgress.some(id=> id === user.id)}
-                                      onClick={() => {props.unfollow(user.id)}}>Unfollow</button>
 
-                            : <button disabled={props.followingInProgress.some(id=> id === user.id)}
-                                      onClick={() => {props.follow(user.id)}}>Follow</button>}
-
-                    </div>
-                </span>
-                        <span>
-                    <span>
-                        <div>{user.name}</div>
-                        <div>{user.status}</div>
-                    </span>
-                    <span>
-                        <div>{"user.location.country"}</div><div>{"user.location.city"}</div>
-                    </span>
-                </span>
-                    </div>)
-                }
+                <User users={props.users}
+                      followingInProgress={props.followingInProgress}
+                      unfollow={props.unfollow}
+                      follow={props.follow}
+                />
             </div>
         </div>
     );
