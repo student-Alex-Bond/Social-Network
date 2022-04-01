@@ -2,12 +2,12 @@ import style from "./../Post/Post.module.css";
 import React from "react";
 
 type PostPropsType = {
-    'message': string,
-    'likesCount': number
+    message: string,
+    likesCount: number
 }
 
 const  Post = React.memo((props: PostPropsType) => {
-
+     console.log(typeof props.message)
     return(
     <div className={style.posts}>
         <div className={style.item}>

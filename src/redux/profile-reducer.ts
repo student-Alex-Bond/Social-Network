@@ -1,5 +1,6 @@
 import {Dispatch} from "redux";
 import {profileAPI, userAPI} from "../API/API";
+import post from "../components/Profile/MyPosts/Post/Post";
 
 
 export type postType = {
@@ -33,13 +34,14 @@ export type profileType ={
 export type addPostAC = ReturnType<typeof addPostActionCreator>
 export  type setUserProfile = ReturnType<typeof setUserProfile>
 export type setStatus = ReturnType<typeof setStatus>
+export type deletePost = ReturnType<typeof deletePostAC>
 export const addPostActionCreator = (newPostText: string) => {
     return {
         type: 'ADD-POST',
         newPostText
     } as const
 }
-
+export const deletePostAC = (id: number) => {return {type: 'DELETE-POST', id} as const}
 
 export const setUserProfile = (profile: profileType) => {
     return{
@@ -85,14 +87,18 @@ export const updateStatus = (status: string) => {
 let initialState = { // обьект для инициализации чтобы в функции combineReducer не было undefined
     posts: [
         {id: 1, message: 'Hi, how are you', likesCount: 15},
-        {id: 2, message: 'I\'m fine', likesCount: 5}] as Array<postType>,
+        {id: 1, message: 'Hi, fuck you', likesCount: 0},
+        {id: 1, message: 'Hi, how are you', likesCount: 0},
+        {id: 2, message: 'I\'m fine', likesCount: 0}] as Array<postType>,
     newPostText: '',
     profile: null as profileType | null,
     status: ''
 }
 export type initialProfileStateType = typeof initialState
 
-const profileReducer = (state: initialProfileStateType = initialState, action:  addPostAC | setUserProfile | setStatus ): initialProfileStateType => {
+type ActionType =addPostAC | setUserProfile | setStatus | deletePost
+
+const profileReducer = (state: initialProfileStateType = initialState, action: ActionType  ): initialProfileStateType => {
 //debugger
     switch (action.type) {
         case 'ADD-POST':
@@ -123,6 +129,10 @@ const profileReducer = (state: initialProfileStateType = initialState, action:  
                 status: action.status
             }
         }
+        case "DELETE-POST": {
+            return {...state, posts: state.posts.filter((item) => item.id !== action.id)}
+        }
+
         default:
             return state
     }
