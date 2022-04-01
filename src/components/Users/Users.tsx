@@ -3,6 +3,7 @@ import ava_user from "../../img/ava_person.svg.png";
 import styles from "./Users.module.css";
 import {usersType} from "../../redux/users-reducer";
 import {NavLink} from 'react-router-dom';
+import {Paginator} from "../common/Padinator/Paginator";
 
 
 type usersProps = {
@@ -18,26 +19,14 @@ type usersProps = {
 
 const Users = (props: usersProps) => {
 
-    let pagesCount = Math.ceil(props.totalUsersCount / props.pageSize)
-
-    let pages = []
-    for (let i = 1; i <= pagesCount; i++) {
-        pages.push(i)
-    }
-
-    let pagination = pages.map(page => {
-        return <span className={props.currentPage === page ? styles.selectedPage : ''}
-                     onClick={() => {
-                         props.onPageChanged(page)
-                     }}>{page}</span>
-    })
-
-
     return (
         <div>
             <div>
                 <div>
-                    {pagination}
+                    <Paginator totalUsersCount={props.totalUsersCount}
+                               pageSize={props.pageSize}
+                               currentPage={props.currentPage}
+                               onPageChanged={props.onPageChanged}/>
                 </div>
                 {
                     props.users.map(user => <div key={user.id}>

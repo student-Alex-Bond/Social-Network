@@ -32,9 +32,9 @@ const LoginPage = (props: LoginPageType) => {
     );
 };
 
-const LoginForm = (props: InjectedFormProps<FormData>) => {
+const LoginForm = ({handleSubmit, error}: InjectedFormProps<FormData>) => {
     return (
-        <form onSubmit={props.handleSubmit}>
+        <form onSubmit={handleSubmit}>
             <div>
                 <Field name={'login'} type={'text'} placeholder={'login'} validate={[requiredField]} component={Input}/>
             </div>
@@ -45,8 +45,8 @@ const LoginForm = (props: InjectedFormProps<FormData>) => {
             <div>
                 <Field name={'rememberMe'} type={'checkbox'} component={Input}/> remember me
             </div>
-            {props.error && <div className={styles.summaryError}>
-                {props.error}
+            {error && <div className={styles.summaryError}>
+                {error}
             </div>}
             <div>
                 <button>Login</button>
@@ -70,7 +70,6 @@ let mapStateToProps = (state: AppStateType): MapStatePropsType => {
 }
 
 type MapDispatchPropsType = {
-
     login: (email: string, password: string, rememberMe: boolean) => void
 }
 export type LoginPageType = MapStatePropsType & MapDispatchPropsType

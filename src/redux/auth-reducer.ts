@@ -4,7 +4,7 @@ import {stopSubmit} from "redux-form"
 import {ThunkAction} from 'redux-thunk'
 import {AppStateType} from "./redux-store";
 
-const SET_USER_DATA = 'SET-USER-DATA'
+const SET_USER_DATA = 'auth/SET-USER-DATA'
 
 const initialState = {
     userId: null,
@@ -18,42 +18,34 @@ export const setAuthUserData = (userId: number | null, email: string | null, log
     return {type: SET_USER_DATA, payload: {userId, email, login, isAuth}}
 }
 
-export const authorization = () => (dispatch: Dispatch<ActionType>) => {
-   return auth.me()
-        .then(response => {
+export const authorization = () => async (dispatch: Dispatch<ActionType>) => {
+   let response = await auth.me()
             if (response.data.resultCode === 0) {
-                let {id, email, login, isAuth} = response.data.data
+                let {id, email, login} = response.data.data
                 dispatch(setAuthUserData(id, email, login, true))
             }
-        })
 }
 
 
 export const login = (email: string, password: string, rememberMe: boolean): ThunkAction<void, AppStateType, unknown, ActionType> =>
-    (dispatch) => {
-    auth.login(email, password, rememberMe)
-        .then(response => {
+   async (dispatch) => {
+    let response = await auth.login(email, password, rememberMe)
             if (response.data.resultCode === 0) {
                 dispatch(authorization())
             } else {
                 let message = response.data.messages.length > 0 ? response.data.messages[0] : "Some Error"
                 console.log(message)
-                // let action = stopSubmit('login', {_error: message});
-                // dispatch(action);
             }
-        })
 }
 
 
-export const logOut = () => {
-    return (dispatch: Dispatch) => {
-        auth.logOut().then(response => {
+export const logOut = () => async (dispatch: Dispatch) => {
+       let response = await auth.logOut()
             if (response.data.resultCode === 0) {
                 dispatch(setAuthUserData(null, null, null, false))
             }
-        })
     }
-}
+
 
 type ActionType = setUserDataType
 

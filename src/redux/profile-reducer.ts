@@ -1,6 +1,6 @@
 import {Dispatch} from "redux";
 import {profileAPI, userAPI} from "../API/API";
-import post from "../components/Profile/MyPosts/Post/Post";
+
 
 
 export type postType = {
@@ -8,7 +8,7 @@ export type postType = {
     message: string
     likesCount: number
 }
-export type profileType ={
+export type profileType = {
     "aboutMe"?: string
     "contacts"?: {
         "facebook": string,
@@ -17,7 +17,7 @@ export type profileType ={
         "twitter": string,
         "instagram": string,
         "youtube": null,
-        "github":string,
+        "github": string,
         "mainLink": null
     },
     "lookingForAJob"?: boolean
@@ -30,57 +30,47 @@ export type profileType ={
     }
 }
 
-
 export type addPostAC = ReturnType<typeof addPostActionCreator>
 export  type setUserProfile = ReturnType<typeof setUserProfile>
 export type setStatus = ReturnType<typeof setStatus>
 export type deletePost = ReturnType<typeof deletePostAC>
+
 export const addPostActionCreator = (newPostText: string) => {
     return {
-        type: 'ADD-POST',
+        type: 'profile/ADD-POST',
         newPostText
     } as const
 }
-export const deletePostAC = (id: number) => {return {type: 'DELETE-POST', id} as const}
-
+export const deletePostAC = (id: number) => {
+    return {type: 'profile/DELETE-POST', id} as const
+}
 export const setUserProfile = (profile: profileType) => {
-    return{
-        type: 'SET_USER_PROFILE',
+    return {
+        type: 'profile/SET_USER_PROFILE',
         profile
     } as const
 }
-export const userProfile =(userId: string) => {
-    return (dispatch: Dispatch) => {
-        userAPI.getProfile(userId).then(response => {
-            dispatch(setUserProfile(response.data))
+export const userProfile = (userId: string) => async (dispatch: Dispatch) => {
+    let response = await userAPI.getProfile(userId)
+    dispatch(setUserProfile(response.data))
 
-        })
-    }
 }
 
-export const setStatus= (status: string) => {
-    return{
-        type: 'SET_STATUS',
+export const setStatus = (status: string) => {
+    return {
+        type: 'profile/SET_STATUS',
         status: status
     } as const
 }
-
-export const getStatus = (userId: string) => {
-    return (dispatch: Dispatch) => {
-        profileAPI.getStatus(userId).then((response)=>{
-            dispatch(setStatus(response.data))
-        })
-    }
+export const getStatus = (userId: string) => async (dispatch: Dispatch) => {
+    let response = await profileAPI.getStatus(userId)
+    dispatch(setStatus(response.data))
 }
 
-export const updateStatus = (status: string) => {
-
-    return (dispatch: Dispatch) => {
-        profileAPI.updateStatus(status).then((response)=>{
-            if (response.data.resultCode === 0){
-                dispatch(setStatus(status))
-            }
-        })
+export const updateStatus = (status: string) => async (dispatch: Dispatch) => {
+    let response = await profileAPI.updateStatus(status)
+    if (response.data.resultCode === 0) {
+        dispatch(setStatus(status))
     }
 }
 
@@ -95,13 +85,12 @@ let initialState = { // обьект для инициализации чтоб�
     status: ''
 }
 export type initialProfileStateType = typeof initialState
+type ActionType = addPostAC | setUserProfile | setStatus | deletePost
 
-type ActionType =addPostAC | setUserProfile | setStatus | deletePost
-
-const profileReducer = (state: initialProfileStateType = initialState, action: ActionType  ): initialProfileStateType => {
+const profileReducer = (state: initialProfileStateType = initialState, action: ActionType): initialProfileStateType => {
 //debugger
     switch (action.type) {
-        case 'ADD-POST':
+        case 'profile/ADD-POST':
             // let stateCopy = {...state}
             // stateCopy.posts = [...state.posts]
             let newPost = {
@@ -117,19 +106,19 @@ const profileReducer = (state: initialProfileStateType = initialState, action: A
                 newPostText: '',
                 posts: state.posts.concat(newPost)
             }
-        case 'SET_USER_PROFILE':{
-            return{
+        case 'profile/SET_USER_PROFILE': {
+            return {
                 ...state,
                 profile: action.profile
             }
         }
-        case 'SET_STATUS': {
+        case 'profile/SET_STATUS': {
             return {
                 ...state,
                 status: action.status
             }
         }
-        case "DELETE-POST": {
+        case "profile/DELETE-POST": {
             return {...state, posts: state.posts.filter((item) => item.id !== action.id)}
         }
 
