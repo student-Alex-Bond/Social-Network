@@ -6,6 +6,7 @@ import authReducer from "./auth-reducer";
 import thunk from "redux-thunk";
 import {reducer as formReducer} from 'redux-form'
 import {appReducer} from "./app-reducer";
+import { composeWithDevTools } from 'redux-devtools-extension';
 
 let rootReducer = combineReducers({
     profilePage: profileReducer,
@@ -16,7 +17,9 @@ let rootReducer = combineReducers({
     app: appReducer
 });
 
-let store = createStore(rootReducer, applyMiddleware(thunk));
+const store = createStore(rootReducer, composeWithDevTools((applyMiddleware(thunk))));
+
+//let store = createStore(rootReducer, applyMiddleware(thunk));
 
 export type AppStateType = ReturnType<typeof rootReducer> // функция  ReturnType типизирует фунцию
 

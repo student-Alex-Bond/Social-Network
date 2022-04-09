@@ -18,8 +18,8 @@ const Paginator = (props: PaginatorPropsType) => {
 
 
     return (<>
-        {pages.map(page => {
-                return <span style={{marginRight: '7px', borderBottom: '1px solid', cursor: 'pointer'}}
+        {pages.map((page, index) => {
+                return <span key={index} style={{marginRight: '7px', borderBottom: '1px solid', cursor: 'pointer'}}
                              className={props.currentPage === page ? styles.selectedPage : ''}
                              onClick={() => {
                                  props.onPageChanged(page)

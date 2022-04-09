@@ -7,7 +7,6 @@ type PostPropsType = {
 }
 
 const  Post = React.memo((props: PostPropsType) => {
-     console.log(typeof props.message)
     return(
     <div className={style.posts}>
         <div className={style.item}>
