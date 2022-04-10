@@ -1,4 +1,4 @@
-import React, {ChangeEvent} from 'react';
+import React from 'react';
 import style from './../Dialogs/Dialogs.module.css';
 import DialogItem from "./Dialog/DialogItem";
 import Message from "./Message/Message";
@@ -45,12 +45,15 @@ function Dialogs(props: DialogsType) {
 export const AddMessageForm = (props: InjectedFormProps<FormData>) => {
     return (<form onSubmit={props.handleSubmit}>
         < div>
-            <Field component={TextArea}
+            <Field style={{resize: 'none'}}
+                   component={TextArea}
                    validate={[requiredField, maxLength100]}
-                   name={'newMessageBody'} placeholder={'Enter your message'}/>
+                   name={'newMessageBody'}
+                   placeholder={'Enter your message'}
+            />
         </div>
         < div>
-            <button > Send</button>
+            <button>Send</button>
         </div>
     </form>)
 }

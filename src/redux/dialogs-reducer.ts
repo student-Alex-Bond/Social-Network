@@ -1,3 +1,4 @@
+
 type messageType = {
     id: number
     message: string
@@ -16,10 +17,10 @@ export type dialogsPageType = {
 
 export type InitialDialogsStateType = typeof initialState
 
-export type sendMessageAC =ReturnType<typeof sendMessageCreator> // возвращает типизацию на основе ActionCreator'a если не получается то в функции ActionCreator возвращаемый обьект дожен быть константой нужно написать  'as const'
+export type sendMessageAC = ReturnType<typeof sendMessageCreator> // возвращает типизацию на основе ActionCreator'a если не получается то в функции ActionCreator возвращаемый обьект дожен быть константой нужно написать  'as const'
 
 
-export const sendMessageCreator = (newMessageBody: string)=> {
+export const sendMessageCreator = (newMessageBody: string) => {
     return {
         type: 'SEND-MESSAGE',
         newMessageBody
@@ -41,16 +42,17 @@ let initialState = { // обьект для инициализации, чтоб
         {id: 4, message: 'i am not understand'},
         {id: 5, message: 'yes of cos'},
     ] as Array<messageType>,
-    newMessageBody: ''
+    newMessageBody: '',
 }
+const dialogsReducer = (state: InitialDialogsStateType = initialState, action: sendMessageAC): dialogsPageType => {
 
-const dialogsReducer = (state: InitialDialogsStateType = initialState , action: sendMessageAC): dialogsPageType => {
+    switch (action.type) {
 
-    switch(action.type){
         case 'SEND-MESSAGE':
-            let newMessage = {id: 6, message: action.newMessageBody}
+            let lastIndex = state.messages.length
+            let newMessage = {id: lastIndex+1, message: action.newMessageBody}
             //state.messages.push({id: 6, message: body})
-           // state.newMessageBody = '';
+            // state.newMessageBody = '';
             return {
                 ...state,
                 newMessageBody: '',
