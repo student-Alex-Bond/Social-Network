@@ -1,5 +1,6 @@
 import {Dispatch} from "redux";
 import {profileAPI, userAPI} from "../API/API";
+import profile from "../components/Profile/Profile";
 
 
 
@@ -50,6 +51,13 @@ export const setUserProfile = (profile: profileType) => {
         profile
     } as const
 }
+
+export const setPhotoSuccess = (photos: any) => {
+    return {
+        type: 'profile/SET_PHOTO_SUCCESS',
+        photos
+    } as const
+}
 export const userProfile = (userId: string) => async (dispatch: Dispatch) => {
     let response = await userAPI.getProfile(userId)
     dispatch(setUserProfile(response.data))
@@ -74,6 +82,13 @@ export const updateStatus = (status: string) => async (dispatch: Dispatch) => {
     }
 }
 
+export const savePhoto = (photos: any) => async (dispatch: Dispatch) => {
+    let response = await profileAPI.savePhoto(photos)
+    if (response.data.resultCode === 0) {
+        dispatch(setPhotoSuccess(response.data.data.photos))
+    }
+}
+
 let initialState = { // обьект для инициализации чтобы в функции combineReducer не было undefined
     posts: [
         {id: 1, message: 'Hi, how are you', likesCount: 15},
@@ -85,7 +100,7 @@ let initialState = { // обьект для инициализации чтоб�
     status: ''
 }
 export type initialProfileStateType = typeof initialState
-type ActionType = addPostAC | setUserProfile | setStatus | deletePost
+type ActionType = addPostAC | setUserProfile | setStatus | deletePost | ReturnType<typeof setPhotoSuccess>
 
 const profileReducer = (state: initialProfileStateType = initialState, action: ActionType): initialProfileStateType => {
 //debugger
@@ -120,6 +135,9 @@ const profileReducer = (state: initialProfileStateType = initialState, action: A
         }
         case "profile/DELETE-POST": {
             return {...state, posts: state.posts.filter((item) => item.id !== action.id)}
+        }
+        case "profile/SET_PHOTO_SUCCESS": {
+            return { ...state, profile: {...state.profile, photos: action.photos}}
         }
 
         default:

@@ -1,6 +1,6 @@
 import React from 'react';
 import {NavLink} from "react-router-dom";
-import ava_user from "../../img/ava_person.svg.png";
+import ava_user from "../../assets/img/ava_person.svg.png";
 import styles from "./Users.module.css";
 import {usersType} from "../../redux/users-reducer";
 

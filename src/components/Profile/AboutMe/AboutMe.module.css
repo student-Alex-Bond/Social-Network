@@ -1,6 +1,7 @@
 .about{
     display: flex;
     padding: 10px;
+    flex-direction: column;
 }
 
 .about img {
@@ -15,7 +16,7 @@
 }
 .name{
     font-size: 25px;
-    font-family: "Georgia";
+    font-family: "Georgia", sans-serif ;
     font-weight: bold;
     margin-top: 15px;
     margin-bottom: 15px;
