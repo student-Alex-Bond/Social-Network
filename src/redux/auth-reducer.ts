@@ -77,7 +77,7 @@ export type InitialStateType = {
 const authReducer = (state: InitialStateType = initialState, action: ActionType): InitialStateType => {
     switch (action.type) {
         case SET_USER_DATA:
-        case GET_CAPTCHA_URL: {
+        case GET_CAPTCHA_URL:  {
             return {
                 ...state,
                 ...action.payload
