@@ -28,7 +28,7 @@ const ProfileStatus: React.FC<ProfileStatusType> = (props) => {
     return (<div>
         {!editMode
             ? <div>
-                <span onDoubleClick={activateEditMode}>{props.status || 'no status'}</span>
+               <b>Status</b>: <span onDoubleClick={activateEditMode}>{props.status || 'no status'}</span>
             </div>
             : <div>
                 <input autoFocus={true} value={status} onBlur={deActivateEditMode}

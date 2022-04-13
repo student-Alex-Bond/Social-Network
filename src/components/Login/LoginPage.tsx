@@ -27,10 +27,12 @@ const LoginPage = (props: LoginPageType) => {
     return (
         <div style={{marginLeft: '20px'}}>
             <h1>Login</h1>
-            <ReduxLoginForm onSubmit={onSubmit}/>
+            <ReduxLoginForm onSubmit={onSubmit} />
         </div>
     );
 };
+
+
 
 const LoginForm = ({handleSubmit, error}: InjectedFormProps<FormData>) => {
     return (
@@ -65,7 +67,7 @@ type MapStatePropsType = {
 
 let mapStateToProps = (state: AppStateType): MapStatePropsType => {
     return {
-        isAuth: state.auth.isAuth,
+        isAuth: state.auth.isAuth
     }
 }
 

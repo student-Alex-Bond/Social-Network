@@ -1,7 +1,5 @@
 import {Dispatch} from "redux";
 import {profileAPI, userAPI} from "../API/API";
-import profile from "../components/Profile/Profile";
-
 
 
 export type postType = {
@@ -11,21 +9,21 @@ export type postType = {
 }
 export type profileType = {
     "aboutMe"?: string
-    "contacts"?: {
-        "facebook": string,
-        "website": null,
-        "vk": string,
-        "twitter": string,
-        "instagram": string,
-        "youtube": null,
-        "github": string,
-        "mainLink": null
+    "contacts": {
+        "facebook": string | null,
+        "website": string | null,
+        "vk": string | null,
+        "twitter": string | null,
+        "instagram": string | null,
+        "youtube": string | null,
+        "github": string | null,
+        "mainLink": string | null
     },
-    "lookingForAJob"?: boolean
-    "lookingForAJobDescription"?: string
-    "fullName"?: string
-    "userId"?: number
-    "photos"?: {
+    "lookingForAJob": boolean
+    "lookingForAJobDescription": string
+    "fullName": string
+    "userId": number
+    "photos": {
         "small": string,
         "large": string
     }
@@ -52,7 +50,7 @@ export const setUserProfile = (profile: profileType) => {
     } as const
 }
 
-export const setPhotoSuccess = (photos: any) => {
+export const setPhotoSuccess = (photos: { "small": string, "large": string }) => {
     return {
         type: 'profile/SET_PHOTO_SUCCESS',
         photos
@@ -134,10 +132,11 @@ const profileReducer = (state: initialProfileStateType = initialState, action: A
             }
         }
         case "profile/DELETE-POST": {
-            return {...state, posts: state.posts.filter((item) => item.id !== action.id)}
+            return {...state, posts: state.posts.filter((post) => post.id !== action.id)}
         }
         case "profile/SET_PHOTO_SUCCESS": {
-            return { ...state, profile: {...state.profile, photos: action.photos}}
+            if(state.profile) return {...state, profile: {...state.profile, photos: action.photos}}
+            return state
         }
 
         default:

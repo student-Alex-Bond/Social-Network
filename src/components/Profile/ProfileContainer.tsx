@@ -41,7 +41,7 @@ class ProfileAPIContainer extends React.Component<ProfilePropsType> {
 
 export type mapStatePropsType = {
     posts: Array<postType>
-    profile: null | profileType
+    profile:  profileType | null
     status: string
     authorizedUserId: number | null
     isAuth: boolean

@@ -54,3 +54,9 @@ export const auth = {
     }
 }
 
+export const securityAPI = {
+    getCaptchaUrl(){
+        return instanceAxios.get(`security/get-captcha-url`)
+    }
+}
+
